@@ -44,10 +44,12 @@ body {
     background: white;
     transform-origin: left center;
     transform-style: preserve-3d;
-    transition: transform 1s;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     overflow: hidden;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 /* 🕳️ Lỗ đục xuyên trang (hình tròn) */
@@ -79,6 +81,8 @@ body {
     background: white;
     backface-visibility: hidden;
     overflow: hidden;
+    transform-style: preserve-3d;
+    will-change: transform;
 }
 
 .page-content h2 {
@@ -151,6 +155,7 @@ body {
 
 .page.flipped {
     transform: rotateY(-180deg);
+    pointer-events: none;
 }
 
 .page.flipped .page-content {
