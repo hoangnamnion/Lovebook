@@ -1,18 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Chặn các thao tác không mong muốn
-    document.addEventListener('contextmenu', (e) => e.preventDefault());
-    document.addEventListener('selectstart', (e) => e.preventDefault());
-    document.addEventListener('dragstart', (e) => e.preventDefault());
-    document.addEventListener('copy', (e) => e.preventDefault());
-    document.addEventListener('cut', (e) => e.preventDefault());
-    document.addEventListener('paste', (e) => e.preventDefault());
-
     const book = document.querySelector('.book');
     let pages = document.querySelectorAll('.page');
     let currentPage = 0;
     let startX = 0;
     let isDragging = false;
-    let touchTimeout;
 
     // Khởi tạo z-index ban đầu
     function initializeZIndex() {
@@ -39,46 +30,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Tối ưu xử lý touch events
+    // Xử lý sự kiện touch
     book.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Ngăn chặn hành vi mặc định
         startX = e.touches[0].clientX;
         isDragging = true;
-        
-        // Clear timeout nếu có
-        if (touchTimeout) {
-            clearTimeout(touchTimeout);
-        }
-    }, { passive: false });
+    });
 
     book.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
-        e.preventDefault(); // Ngăn chặn hành vi mặc định
         
         const currentX = e.touches[0].clientX;
         const diff = startX - currentX;
 
-        if (Math.abs(diff) > 50) {
-            if (diff > 0 && currentPage < pages.length - 1) {
-                flipPage('next');
-                isDragging = false;
-            }
-            else if (diff < 0 && currentPage > 0) {
-                flipPage('prev');
-                isDragging = false;
-            }
-        }
-    }, { passive: false });
-
-    book.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        isDragging = false;
-        
-        // Thêm timeout để tránh lỗi load
-        touchTimeout = setTimeout(() => {
+        if (diff > 50 && currentPage < pages.length - 1) {
+            flipPage('next');
             isDragging = false;
-        }, 100);
-    }, { passive: false });
+        }
+        else if (diff < -50 && currentPage > 0) {
+            flipPage('prev');
+            isDragging = false;
+        }
+    });
+
+    book.addEventListener('touchend', () => {
+        isDragging = false;
+    });
 
     // Xử lý sự kiện chuột
     book.addEventListener('mousedown', (e) => {
@@ -127,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hearts = document.querySelector('.falling-hearts');
     if (hearts) {
         let heartCount = 0;
-        const maxHearts = 10;
+        const maxHearts = 10; // Giới hạn số lượng trái tim tối đa
 
         function createFallingHeart() {
             if (heartCount >= maxHearts) return;
@@ -146,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 4000);
         }
 
+        // Tạo trái tim mỗi 1 giây thay vì 500ms
         setInterval(createFallingHeart, 1000);
     }
 }); 
