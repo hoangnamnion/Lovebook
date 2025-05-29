@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Khởi tạo z-index ban đầu
     function initializeZIndex() {
-        pages = document.querySelectorAll('.page'); // Cập nhật lại danh sách trang
+        pages = document.querySelectorAll('.page');
         const totalPages = pages.length;
         pages.forEach((page, index) => {
             page.style.zIndex = totalPages - index;
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hàm cập nhật z-index khi thêm trang mới
     function updateAllZIndex() {
-        pages = document.querySelectorAll('.page'); // Cập nhật lại danh sách trang
+        pages = document.querySelectorAll('.page');
         const totalPages = pages.length;
         pages.forEach((page, index) => {
             if (index < currentPage) {
@@ -99,17 +99,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Hiệu ứng trái tim rơi
-    function createFallingHeart() {
-        const hearts = document.querySelector('.falling-hearts');
-        if (!hearts) return;
-        const heart = document.createElement('div');
-        heart.className = 'falling-heart';
-        heart.innerHTML = `<svg viewBox="0 0 32 29.6" width="32" height="32"><path fill="#ff6b81" d="M23.6,0c-2.7,0-5.1,1.3-6.6,3.3C15.5,1.3,13.1,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.1,5.2,11.1,13.1,18.2l2.2,2l2.2-2C26.8,21.5,32,16.5,32,10.4C32,4.7,27.3,0,23.6,0z"/></svg>`;
-        heart.style.left = Math.random() * 96 + 'vw';
-        heart.style.animationDuration = (2.8 + Math.random() * 1.5) + 's';
-        hearts.appendChild(heart);
-        setTimeout(() => heart.remove(), 4000);
+    // Tối ưu hiệu ứng trái tim rơi
+    const hearts = document.querySelector('.falling-hearts');
+    if (hearts) {
+        let heartCount = 0;
+        const maxHearts = 10; // Giới hạn số lượng trái tim tối đa
+
+        function createFallingHeart() {
+            if (heartCount >= maxHearts) return;
+            
+            const heart = document.createElement('div');
+            heart.className = 'falling-heart';
+            heart.innerHTML = `<svg viewBox="0 0 32 29.6" width="32" height="32"><path fill="#ff6b81" d="M23.6,0c-2.7,0-5.1,1.3-6.6,3.3C15.5,1.3,13.1,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.1,5.2,11.1,13.1,18.2l2.2,2l2.2-2C26.8,21.5,32,16.5,32,10.4C32,4.7,27.3,0,23.6,0z"/></svg>`;
+            heart.style.left = Math.random() * 96 + 'vw';
+            heart.style.animationDuration = (2.8 + Math.random() * 1.5) + 's';
+            hearts.appendChild(heart);
+            heartCount++;
+
+            setTimeout(() => {
+                heart.remove();
+                heartCount--;
+            }, 4000);
+        }
+
+        // Tạo trái tim mỗi 1 giây thay vì 500ms
+        setInterval(createFallingHeart, 1000);
     }
-    setInterval(createFallingHeart, 500);
 }); 
